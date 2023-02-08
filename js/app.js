@@ -31,8 +31,8 @@ class UI {
         const { presupuesto, restante } = cantidad;
 
         // Agregar el HTML
-        document.querySelector('#total').textContent = presupuesto
-        document.querySelector('#restante').textContent = restante
+        document.querySelector('#total').textContent = presupuesto;
+        document.querySelector('#restante').textContent = restante;
     }
 
     imprimirAlerta(mensaje, tipo) {
@@ -56,15 +56,46 @@ class UI {
         setTimeout(() => {
             divMensaje.remove();
         }, 3000);
+    }
 
+    agregarGastoListado(gastos) {
+        
+        this.limpiarHTML(); // Elimina el HTML previo
+
+        // Iterar sobre los gastos
+        gastos.forEach( gasto => {
+            const { cantidad, nombre, id } = gasto;
+
+            // Crear un LI
+            const nuevoGasto = document.createElement('li');
+            nuevoGasto.className = 'list-groups-item d-flex justify-content-between align-items-center';
+            nuevoGasto.dataset.id = id;
+
+            // Agregar el HTML del gasto
+            nuevoGasto.innerHTML = ` ${nombre} <span class="badge badge-primary badge-pill"> ${cantidad} </span>`;
+
+            // Botón para borrar el gasto
+            const btnBorrar = document.createElement('button');
+            btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
+            btnBorrar.innerHTML = 'Borrar &times;'
+
+            nuevoGasto.appendChild(btnBorrar);
+
+            // Agregar al HTML
+            gastoListado.appendChild(nuevoGasto);
+        });
+    }
+
+    limpiarHTML() {
+        while( gastoListado.firstChild ) {
+            gastoListado.removeChild(gastoListado.firstChild);
+        }
     }
 }
 
 /* ---- Instanciar ---- */
 const ui = new UI();
 let presupuesto;
-
-
 
 /* —————————————————————— Funciones ——————————————————————— */
 function preguntarPresupuesto() {
@@ -107,6 +138,10 @@ function agregarGasto(e) {
 
     // Mensaje de gasto agregado
     ui.imprimirAlerta('Gasto agregado correctamente');
+
+    // Imprimir los gastos
+    const { gastos } = presupuesto;
+    ui.agregarGastoListado(gastos);
 
     // Reinicia el formulario
     formulario.reset();

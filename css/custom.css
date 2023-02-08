@@ -36,3 +36,12 @@ h2 {
     font-size: 22px;
     margin-bottom:30px;
 }
+
+.btn {
+    padding: auto;
+    margin: 10px;
+}
+
+.badge {
+    margin: 10px 10px 10px 15px;
+}
